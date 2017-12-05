@@ -19,11 +19,10 @@ export default new Router({
   linkActiveClass: 'active',
   scrollBehavior: (to, from, savedPosition) => ({ y: 0 }),
   routes: [
-    { path: '/', redirect: '/home' },
-    { path: "/home", component: Home },
-    { path: "/home", component: Home },
-    { path: "/home", component: Home },
-    { path: "/home", component: Home },
-    { path: "*", component: NotFound }
+    { path: "/", component: Home },
+    { path: "/portfolio", component: Portfolio },
+    { path: "/stocks", component: Stocks },
+    { path: "/notfound", component: NotFound },
+    { path: "*", redirect: "/notfound" }
   ]
 })

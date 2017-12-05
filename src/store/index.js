@@ -1,16 +1,15 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
-import appService from '../app.service';
-import postsModule from './posts';
+import stocks from './modules/stocks';
+import portfolio from './modules/portfolio';
 
 Vue.use(Vuex);
 
-const state = {
-    isAuthenticated: false
-}
-
 const store = new Vuex.Store({
-    state
+    modules: {
+        stocks,
+        portfolio
+    }
 });
 
 export default store;

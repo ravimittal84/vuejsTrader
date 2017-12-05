@@ -1,28 +1,11 @@
 import axios from 'axios';
 
-axios.defaults.baseURL = 'https://api.fullstackweekly.com';
+axios.defaults.baseURL = 'https://vuejs-trader-c57a6.firebaseio.com/';
 
-axios.interceptors.request.use(function (config) {
-    const token = window.localStorage.getItem('token');
-    if (token) {
-        config.headers.Authorization = `Bearer ${token}`;
-    }
-
-    return config;
-});
-
-const appService = {
-    getposts(categoryId) {
-        return new Promise(resolve => {
-            axios.get(`/wp-json/wp/v2/posts?categories=${categoryId}&per_page=6`)
-                .then(res => {
-                    resolve(res.data);
-                });
-        });
-    },
-    login(cred) {
+export default {
+    saveData(data) {
         return new Promise((resolve, reject) => {
-            axios.post('/services/auth.php', cred)
+            axios.put('data.json', data)
                 .then(res => {
                     resolve(res.data);
                 }).catch(res => {
@@ -30,14 +13,14 @@ const appService = {
                 });
         });
     },
-    getProfile() {
+    loadData() {
         return new Promise(resolve => {
-            axios.get('/services/profile.php')
+            axios.get(`data.json`)
                 .then(res => {
                     resolve(res.data);
+                }).catch(res => {
+                    reject(res.status);
                 });
         });
     }
-};
-
-export default appService;
+}

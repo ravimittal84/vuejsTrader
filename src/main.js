@@ -7,6 +7,8 @@ import store from './store'
 
 Vue.config.productionTip = false
 
+Vue.filter('currency', val => `£${val}`);
+
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
