@@ -14,8 +14,9 @@ const mutations = {
 }
 
 const actions = {
-    setStock: ({commit}, stocks) => commit('SET_STOCKS', stocks ? stocks : []),
-    randomizeStocks: ({commit}) => commit('RND_STOCKS')
+    randomizeStocks: ({commit}) => {
+        commit('RND_STOCKS');
+    }
 }
 
 const getters = {

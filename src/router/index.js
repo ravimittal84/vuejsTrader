@@ -1,11 +1,14 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import NotFound from '@/components/NotFound'
-import Home from '@/components/Home'
 import Stocks from '@/components/stocks/Stocks'
 import StocksStock from '@/components/stocks/Stock'
 import Portfolio from '@/components/portfolio/Portfolio'
 import PortfolioStock from '@/components/portfolio/Stock'
+import WelcomePage from '@/components/welcome/welcome.vue'
+import DashboardPage from '@/components/dashboard/dashboard.vue'
+import SignupPage from '@/components/auth/signup.vue'
+import SigninPage from '@/components/auth/signin.vue'
 
 // Lazy Loading
 // const Category = () => System.import('@/components/Category');
@@ -19,7 +22,10 @@ export default new Router({
   linkActiveClass: 'active',
   scrollBehavior: (to, from, savedPosition) => ({ y: 0 }),
   routes: [
-    { path: "/", component: Home },
+    { path: '/', component: WelcomePage },
+    { path: '/signup', component: SignupPage },
+    { path: '/signin', component: SigninPage },
+    { path: '/dashboard', component: DashboardPage },
     { path: "/portfolio", component: Portfolio },
     { path: "/stocks", component: Stocks },
     { path: "/notfound", component: NotFound },

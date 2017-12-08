@@ -13,6 +13,15 @@
                     <router-link tag="li" to="/stocks">
                         <a>Stocks</a>
                     </router-link>
+                    <li>
+                        <router-link to="/signup">Sign Up</router-link>
+                    </li>
+                    <li>
+                        <router-link to="/signin">Sign In</router-link>
+                    </li>
+                    <li>
+                        <router-link to="/dashboard">Dashboard</router-link>
+                    </li>
                 </ul>
 
                 <ul class="nav navbar-nav navbar-right">
@@ -23,19 +32,19 @@
                         <a>Funds: {{funds | currency}}</a>
                     </li>
                     <li>
-                        <a @click="update">Update Price</a>
+                        <a @click="randomizeStocks">Update Price</a>
                     </li>
-                    <li class="dropdown" :class="{'open' : open}">
-                        <a href="#" @click.prevent="open = !open" class="dropdown-toggle">
+                    <li class="dropdown" @mouseover="open = true" @mouseout="open = false" :class="{'open' : open}">
+                        <a href="#" class="dropdown-toggle">
                             Dropdown
                             <span class="caret"></span>
                         </a>
                         <ul class="dropdown-menu" role="menu">
                             <li>
-                                <a href="#" @click.prevent="save">Save Data</a>
+                                <a href="#" @click.prevent="saveData({funds, stockPortfolio, stocks})">Save Data</a>
                             </li>
                             <li>
-                                <a href="#" @click.prevent="load">Load Data</a>
+                                <a href="#" @click.prevent="loadData">Load Data</a>
                             </li>
                         </ul>
                     </li>
@@ -48,7 +57,6 @@
 <script>
 import StockData from '../data/stocks';
 import { mapGetters, mapActions } from 'vuex';
-import appService from '../app.service';
 export default {
     data() {
         return {
@@ -58,30 +66,9 @@ export default {
     methods: {
         ...mapActions([
             'randomizeStocks',
-            'setStock',
-            'setFunds',
-            'setPortfolioStocks'
-        ]),
-        update() {
-            this.randomizeStocks();
-        },
-        save() {
-            appService.saveData({
-                funds: this.funds,
-                stockPortfolio: this.stockPortfolio,
-                stocks: this.stocks
-            });
-            this.open = false;
-        },
-        load() {
-            appService.loadData()
-                .then(data => {
-                    this.setStock(data.stocks);
-                    this.setFunds(data.funds);
-                    this.setPortfolioStocks(data.stockPortfolio);
-                });
-            this.open = false;
-        }
+            'loadData',
+            'saveData'
+        ])
     },
     computed: {
         ...mapGetters([
