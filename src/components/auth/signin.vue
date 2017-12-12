@@ -27,6 +27,7 @@
 </template>
 
 <script>
+import router from '../../router';
   export default {
     data () {
       return {
@@ -40,7 +41,8 @@
           email: this.email,
           password: this.password,
         }
-        this.$store.dispatch('signInUser', formData);
+        this.$store.dispatch('signInUser', formData)
+          .then(res => router.replace('/dashboard'));
       }
     }
   }

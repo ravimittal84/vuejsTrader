@@ -10,6 +10,7 @@ import DashboardPage from '@/components/dashboard/dashboard.vue'
 import SignupPage from '@/components/auth/signup.vue'
 import SigninPage from '@/components/auth/signin.vue'
 
+import store from '../store';
 // Lazy Loading
 // const Category = () => System.import('@/components/Category');
 // const Login = () => System.import('@/components/Login');
@@ -25,9 +26,37 @@ export default new Router({
     { path: '/', component: WelcomePage },
     { path: '/signup', component: SignupPage },
     { path: '/signin', component: SigninPage },
-    { path: '/dashboard', component: DashboardPage },
-    { path: "/portfolio", component: Portfolio },
-    { path: "/stocks", component: Stocks },
+    {
+      path: '/dashboard',
+      component: DashboardPage,
+      beforeEnter(to, from, next) {
+        if (store.state.isAuthenticated) {
+          next()
+        } else {
+          next('/') // send user to home path
+        }
+      }
+    },
+    {
+      path: "/portfolio", component: Portfolio,
+      beforeEnter(to, from, next) {
+        if (store.state.isAuthenticated) {
+          next()
+        } else {
+          next('/')
+        }
+      }
+    },
+    {
+      path: "/stocks", component: Stocks,
+      beforeEnter(to, from, next) {
+        if (store.state.isAuthenticated) {
+          next()
+        } else {
+          next('/')
+        }
+      }
+    },
     { path: "/notfound", component: NotFound },
     { path: "*", redirect: "/notfound" }
   ]

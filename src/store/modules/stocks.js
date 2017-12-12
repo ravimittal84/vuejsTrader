@@ -1,12 +1,14 @@
+import * as mutationTypes from '../mutation-types';
+
 const state = {
     stocks: []
 }
 
 const mutations = {
-    'SET_STOCKS' (state, stocks) {
+    [mutationTypes.SET_STOCKS] (state, stocks) {
         state.stocks = stocks;
     },
-    'RND_STOCKS' (state) {
+    [mutationTypes.RND_STOCKS] (state) {
         state.stocks.forEach(stock => {
             stock.price = Math.round(stock.price * (1 + (Math.random()/5 - 0.1)));
         });
@@ -14,9 +16,7 @@ const mutations = {
 }
 
 const actions = {
-    randomizeStocks: ({commit}) => {
-        commit('RND_STOCKS');
-    }
+    randomizeStocks: ({commit}) => commit(mutationTypes.RND_STOCKS)    
 }
 
 const getters = {

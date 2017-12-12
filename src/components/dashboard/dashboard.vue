@@ -1,8 +1,9 @@
 <template>
   <div id="dashboard">
     <h1>Dashboard</h1>
-    <p>You should only get here if you're authenticated!</p>
+    <!-- <p>You should only get here if you're authenticated!</p> -->
     <p v-if="hasUser">Your email: {{user.email}}</p>
+    <p v-else>Fetching user information...</p>
   </div>
 </template>
 

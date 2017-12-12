@@ -1,4 +1,5 @@
 import appService from '../../app.service';
+import * as mutationTypes from '../mutation-types';
 
 const state = {
     funds: 10000,
@@ -7,7 +8,7 @@ const state = {
 }
 
 const mutations = {
-    'BUY_STOCKS'(state, { id, price, quantity }) {
+    [mutationTypes.BUY_STOCKS]: (state, { id, price, quantity }) => {
         const record = state.stocks.find(el => el.id == id);
         if (record) {
             record.quantity += quantity;
@@ -17,7 +18,7 @@ const mutations = {
         }
         state.funds -= price * quantity;
     },
-    'SELL_STOCKS'(state, { id, price, quantity }) {
+    [mutationTypes.SELL_STOCKS]: (state, { id, price, quantity }) => {
         const record = state.stocks.find(el => el.id == id);
         if (record && record.quantity >= quantity) {
             record.quantity -= quantity;
@@ -27,32 +28,28 @@ const mutations = {
         if (record.quantity <= 0)
             state.stocks.splice(state.stocks.indexOf(record), 1);
     },
-    'SET_FUNDS'(state, funds) {
-        state.funds = funds;
-    },
-    'SET_PORTFOLIO_STOCKS'(state, stocks) {
-        state.stocks = stocks
-    },
-    'SET_USER'(state, user) {
-        state.user = user;
-    }
+    [mutationTypes.SET_FUNDS]: (state, funds) => state.funds = funds,
+    [mutationTypes.SET_PORTFOLIO_STOCKS]: (state, stocks) => state.stocks = stocks,
+    [mutationTypes.SET_USER]: (state, user) => state.user = user,
+    [mutationTypes.CLEAR_USER]: (state) => state.user = null
 }
 
 const actions = {
-    buyStock: (context, stock) => context.commit('BUY_STOCKS', stock),
-    sellStock: ({ commit }, stock) => commit('SELL_STOCKS', stock),
-    async loadData({ commit }) {
+    buyStock: (context, stock) => context.commit(mutationTypes.BUY_STOCKS, stock),
+    sellStock: ({ commit }, stock) => commit(mutationTypes.SELL_STOCKS, stock),
+    loadData: async ({ commit, state }) => {
         var data = await appService.loadData();
 
-        commit('SET_STOCKS', data.stocks);
-        commit('SET_FUNDS', data.funds);
-        commit('SET_PORTFOLIO_STOCKS', data.stockPortfolio);
+        commit(mutationTypes.SET_STOCKS, data.stocks);
+        commit(mutationTypes.SET_FUNDS, data.funds);
+        commit(mutationTypes.SET_PORTFOLIO_STOCKS, data.stockPortfolio);
     },
-    async saveData({ commit }, data) {
+    saveData: async ({ commit }, data) => {
         await appService.saveData(data);
     },
-    fetchUsers({ commit }) {
-        appService.fetchUsers().then(data => {
+    fetchUsers: async ({ commit }) => {
+        if (state.user === null) {
+            var data = await appService.fetchUsers();
             let users = [];
             for (var key in data) {
                 if (data.hasOwnProperty(key)) {
@@ -61,8 +58,8 @@ const actions = {
                     users.push(user);
                 }
             }
-            commit('SET_USER', users[0]);
-        });
+            commit(mutationTypes.SET_USER, users[0]);
+        }
     }
 }
 

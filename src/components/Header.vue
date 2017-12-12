@@ -6,25 +6,19 @@
             </div>
 
             <div class="collapse navbar-collapse">
-                <ul class="nav navbar-nav">
+                <ul v-if="$store.state.isAuthenticated" class="nav navbar-nav">
                     <router-link tag="li" to="/portfolio">
                         <a>Portfolio</a>
                     </router-link>
                     <router-link tag="li" to="/stocks">
                         <a>Stocks</a>
                     </router-link>
-                    <li>
-                        <router-link to="/signup">Sign Up</router-link>
-                    </li>
-                    <li>
-                        <router-link to="/signin">Sign In</router-link>
-                    </li>
-                    <li>
-                        <router-link to="/dashboard">Dashboard</router-link>
-                    </li>
+                    <router-link tag="li" to="/dashboard">
+                        <a>Dashboard</a>
+                    </router-link>
                 </ul>
 
-                <ul class="nav navbar-nav navbar-right">
+                <ul v-if="$store.state.isAuthenticated" class="nav navbar-nav navbar-right">
                     <li>
                         <a>Equity: {{equity | currency}}</a>
                     </li>
@@ -36,7 +30,7 @@
                     </li>
                     <li class="dropdown" @mouseover="open = true" @mouseout="open = false" :class="{'open' : open}">
                         <a href="#" class="dropdown-toggle">
-                            Dropdown
+                            Settings
                             <span class="caret"></span>
                         </a>
                         <ul class="dropdown-menu" role="menu">
@@ -46,8 +40,19 @@
                             <li>
                                 <a href="#" @click.prevent="loadData">Load Data</a>
                             </li>
+                            <li>
+                                <a href="#" @click.prevent="onSignOut">Logout</a>
+                            </li>
                         </ul>
                     </li>
+                </ul>
+                <ul v-else class="nav navbar-nav navbar-right">
+                    <router-link tag="li" to="/signup">
+                        <a>Sign Up</a>
+                    </router-link>
+                    <router-link tag="li" to="/signin">
+                        <a>Sign In</a>
+                    </router-link>
                 </ul>
             </div>
         </div>
@@ -57,6 +62,7 @@
 <script>
 import StockData from '../data/stocks';
 import { mapGetters, mapActions } from 'vuex';
+import router from '../router';
 export default {
     data() {
         return {
@@ -67,8 +73,16 @@ export default {
         ...mapActions([
             'randomizeStocks',
             'loadData',
-            'saveData'
-        ])
+            'saveData',
+            'signOutUser'
+        ]),
+        onSignOut() {
+            this.signOutUser()
+                .then(res => {
+                    router.replace('/signin');
+                    this.open = false;
+                })
+        }
     },
     computed: {
         ...mapGetters([

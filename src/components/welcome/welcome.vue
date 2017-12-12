@@ -1,13 +1,15 @@
 <template>
   <div class="row text-center">
     <h1>Welcome!</h1>
-    <div>
+    <div v-if="!$store.state.isAuthenticated">
       <router-link class="btn btn-primary" to="/signup">Sign Up</router-link>
       <router-link class="btn btn-primary" to="/signin">Sign In</router-link>
     </div>
   </div>
 </template>
 
-<style>
-
-</style>
+<script>
+export default {
+  
+}
+</script>
